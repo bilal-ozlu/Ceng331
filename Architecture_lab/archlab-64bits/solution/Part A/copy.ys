@@ -1,0 +1,46 @@
+# Bilal Özlü
+# 1942614
+
+.pos 0
+irmovq stack, %rsp
+call main
+halt
+
+.align 8
+# Source block
+src:
+.quad 0x00a
+.quad 0x0b0
+.quad 0xc00
+# Destination
+dest:
+.quad 0x111
+.quad 0x222
+.quad 0x333
+
+main:
+irmovq src,%rdi
+irmovq dest,%rsi
+irmovq $3,%rdx      #len=3
+xorq %rax,%rax      #result=0
+call loop
+ret
+
+loop:
+mrmovq (%rdi),%rbx  #val=*src
+irmovq $8,%r8
+addq %r8,%rdi       #*src++
+mrmovq (%rdi),%r9
+rmmovq %r9,(%rsi)   #*dest=val
+addq %r8,%rsi       #*dest++
+xorq %rbx,%rax      #result^=val
+irmovq $1,%r10
+subq %r10,%rdx      #len--
+andq %rdx,%rdx      #len>0?
+jne loop
+
+return:
+ret
+
+.pos 0x200
+stack:

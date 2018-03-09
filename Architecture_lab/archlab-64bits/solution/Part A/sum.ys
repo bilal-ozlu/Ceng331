@@ -1,0 +1,40 @@
+# Bilal Özlü
+# 1942614
+
+.pos 0
+irmovq stack, %rsp
+call main
+halt
+
+#linkedlist elements
+.align 8
+ele1:
+.quad 0x00a
+.quad ele2
+ele2:
+.quad 0x0b0
+.quad ele3
+ele3:
+.quad 0xc00
+.quad 0
+
+main:
+irmovq ele1,%rdi
+call sum
+ret
+
+sum:
+irmovq $0, %rax
+
+loop:
+mrmovq (%rdi),%r9   	#start
+addq %r9,%rax       	#add
+mrmovq 8(%rdi), %rdi	#next element
+andq %rdi, %rdi     	#last element?
+jne loop
+
+test:
+ret
+
+.pos 0x200
+stack:
